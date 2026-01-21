@@ -25,7 +25,7 @@ const initSocket = (httpServer) => {
             await produceMessage(msg);
         })
 
-        socket.on('disconnect', () => {
+        socket.on('disconnect', () => { 
             console.log('a user disconnected', socket.id);
         })
     });

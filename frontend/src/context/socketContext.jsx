@@ -3,13 +3,13 @@ import { io } from "socket.io-client";
 export const SocketContext = createContext();
 
 export const SocketProvider = ({ children }) => {
-    const socket = io("http://localhost:3001");
+    const socket = useMemo(() => io("http://localhost:3001"), [])
     const [messages, setMessages] = useState([]);
 
     const sendMessage = useCallback((msg) => {
         console.log("Message sent", msg);
         socket.emit("message", msg);
-    }, [socket])
+    }, [])
 
     const onMessageReceived = useCallback((msg) => {
         console.log("Message from server", msg);

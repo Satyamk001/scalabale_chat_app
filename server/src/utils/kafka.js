@@ -16,11 +16,13 @@ const kafka = new Kafka({
     }
 });
 
-const producer = kafka.producer();
-const consumer = kafka.consumer({ groupId: "chat-app" });
+let producer = null;
+let consumer = null;
 
 const initKafka = async () => {
     try {
+        producer = kafka.producer();
+        consumer = kafka.consumer({ groupId: "chat-app" });
         await producer.connect();
         await consumer.connect();
         await consumer.subscribe({ topic: "CHAT", fromBeginning: true });
@@ -41,7 +43,7 @@ const produceMessage = async (message) => {
 }
 
 const consumeMessage = async () => {
-    if (!consumer) await initKafka();
+    if (!consumer || !producer) await initKafka();
     console.log("Kafka consumer started");
     await consumer.run({
         eachMessage: async ({ message, pause }) => {
